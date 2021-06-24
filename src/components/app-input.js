@@ -67,7 +67,7 @@ class AppInput extends HTMLElement {
       input.setAttribute(attr, this[attr]);
     });
 
-    input.addEventListener('change', e => {
+    input.addEventListener('keydown', e => {
       this.value = (this.type === 'number' ? +e.target.value : e.target.value);
     });
 
