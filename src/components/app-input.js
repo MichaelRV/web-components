@@ -22,7 +22,27 @@ class AppInput extends HTMLElement {
 
     this.attachShadow({ mode: 'open' });
 
+    this.injectStyles();
     this.injectContent();
+  }
+
+  injectStyles() {
+    const styleEl = document.createElement('style');
+
+    styleEl.innerHTML = `
+      input {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 16px;
+        line-height: 1.2;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: none;
+        padding: 10px 15px;
+      }
+    `;
+
+    this.shadowRoot.appendChild(styleEl);
   }
 
   injectContent() {

@@ -11,16 +11,40 @@
   <meta name="description" content="Web components example">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .wrap {
+      text-align: center;
+    }
+
+    #form {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    #result {
+      text-align: center;
+      font-size: 36px;
+      line-height: 1.2;
+      padding: 10px 15px;
+    }
+  </style>
 </head>
 
 <body>
 <script type="module" src="main.js"></script>
 
 <div class="wrap">
-  <app-input id="input" placeholder="Number" type="number"></app-input>
-  <app-button id="button">Button</app-button>
+  <div id="form">
+    <app-input id="input" placeholder="Number" type="number"></app-input>
+    <app-button id="button">Multiple</app-button>
+  </div>
 
-  <span id="result"></span>
+  <div id="result"></div>
 </div>
 
 </body>
