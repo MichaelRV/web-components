@@ -1,6 +1,10 @@
 class AppInput extends HTMLElement {
-  elAttrs = ['label'];
-  inputAttrs = ['type', 'name', 'placeholder', 'value'];
+  static get observedAttributes() {
+    return ['label', 'type', 'name', 'placeholder', 'value'];
+  }
+
+  labelEl = null;
+  inputEl = null;
 
   type = 'text';
   name = null;
@@ -10,14 +14,17 @@ class AppInput extends HTMLElement {
   constructor() {
     super();
 
-    this.inputAttrs.forEach(attr => {
-      if (this.hasAttribute(attr)) {
-        this[attr] = this.getAttribute(attr);
-      }
-    });
-
-    if (this.type === 'number' && !this.value) {
-      this.value = null;
+    if (this.hasAttribute('type')) {
+      this.type = this.getAttribute('type');
+    }
+    if (this.hasAttribute('name')) {
+      this.name = this.getAttribute('name');
+    }
+    if (this.hasAttribute('placeholder')) {
+      this.placeholder = this.getAttribute('placeholder');
+    }
+    if (this.hasAttribute('value')) {
+      this.value = this.getAttribute('value');
     }
 
     this.attachShadow({ mode: 'open' });
@@ -46,32 +53,55 @@ class AppInput extends HTMLElement {
   }
 
   injectContent() {
-    this.elAttrs.forEach(attr => {
-      if (this.hasAttribute(attr)) {
-        switch (attr) {
-          case 'label':
-            const labelEl = document.createElement('label');
+    if (this.hasAttribute('label')) {
+      this.labelEl = document.createElement('label');
 
-            labelEl.innerText = this.getAttribute('label');
+      this.labelEl.innerHTML = this.getAttribute('label');
 
-            this.shadowRoot.appendChild(labelEl);
+      this.shadowRoot.appendChild(this.labelEl);
+    }
 
-            break;
+    this.inputEl = document.createElement('input');
+
+    this.inputEl.setAttribute('type', this.type);
+    this.inputEl.setAttribute('name', this.name);
+    this.inputEl.setAttribute('placeholder', this.placeholder);
+    this.inputEl.setAttribute('value', this.value);
+
+    this.shadowRoot.appendChild(this.inputEl);
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    switch (name) {
+      case 'label':
+        if (this.labelEl) {
+          this.labelEl.innerHTML = newValue;
+        } else {
+          this.labelEl = document.createElement('label');
+
+          this.labelEl.innerHTML = newValue;
         }
-      }
-    });
 
-    const input = document.createElement('input');
+        break;
+      case 'type':
+      case 'name':
+      case 'placeholder':
+      case 'value':
+        this[name] = newValue;
+        this.inputEl[name] = newValue;
 
-    this.inputAttrs.forEach(attr => {
-      input.setAttribute(attr, this[attr]);
-    });
+        break;
+      default:
+        break;
+    }
+  }
 
-    input.addEventListener('keydown', e => {
-      this.value = (this.type === 'number' ? +e.target.value : e.target.value);
-    });
-
-    this.shadowRoot.appendChild(input);
+  connectedCallback() {
+    if (this.inputEl.isConnected) {
+      this.inputEl.addEventListener('input', e => {
+        this.value = e.target.value;
+      });
+    }
   }
 }
 

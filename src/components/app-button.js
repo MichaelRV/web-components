@@ -1,16 +1,18 @@
 class AppButton extends HTMLElement {
-  buttonAttrs = ['type'];
+  static get observedAttributes() {
+    return ['type'];
+  }
+
+  buttonEl = null;
 
   type = 'button';
 
   constructor() {
     super();
 
-    this.buttonAttrs.forEach(attr => {
-      if (this.hasAttribute(attr)) {
-        this[attr] = this.getAttribute(attr);
-      }
-    });
+    if (this.hasAttribute('type')) {
+      this.type = this.getAttribute('type');
+    }
 
     this.attachShadow({ mode: 'open' });
 
@@ -38,15 +40,24 @@ class AppButton extends HTMLElement {
   }
 
   injectContent() {
-    const buttonEl = document.createElement('button');
+    this.buttonEl = document.createElement('button');
 
-    this.buttonAttrs.forEach(attr => {
-      buttonEl.setAttribute(attr, this[attr]);
-    });
+    this.buttonEl.type = this.type;
+    this.buttonEl.innerHTML = this.innerHTML;
 
-    buttonEl.innerHTML = this.innerHTML;
+    this.shadowRoot.appendChild(this.buttonEl);
+  }
 
-    this.shadowRoot.appendChild(buttonEl);
+  attributeChangedCallback(name, oldValue, newValue) {
+    switch (name) {
+      case 'type':
+        this[name] = newValue;
+        this.buttonEl[name] = newValue;
+
+        break;
+      default:
+        break;
+    }
   }
 }
 
