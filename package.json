@@ -1,0 +1,27 @@
+{
+  "name": "web-components",
+  "version": "0.0.1",
+  "description": "Web components example",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelRV/web-components.git"
+  },
+  "keywords": [
+    "web-component"
+  ],
+  "author": "MichaelRV",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MichaelRV/web-components/issues"
+  },
+  "homepage": "https://github.com/MichaelRV/web-components#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.3.2",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
